@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Die Linke Präsentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Paste your CSS inside this <style> tag -->
+  <style>
+    /* === START OF YOUR CSS === */
+    
+    /* Paste entire CSS here */
+    /* Global Reset and Body Styling */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #000;
+}
+
+/* Presentation Container */
+.presentation {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Common Slide Styling */
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  color: #fff;
+  /* Smoother morph transition animation */
+  animation: morphTransition 0.8s ease-out forwards;
+}
+
+/* Background Layer */
+.slide .background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Main Menu Background (Slide 0) with Scanline Effect */
+.slide.main-menu .background {
+  background-image: url('https://i.pinimg.com/originals/d7/e7/81/d7e781b32269a8a82b500c1a9dc97733.gif');
+  filter: blur(8px);
+  position: relative;
+}
+.slide.main-menu .background::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.1) 2px,
+    rgba(0,0,0,0.1) 4px
+  );
+  pointer-events: none;
+}
+
+/* Regular Slides Background (Slides 1-9) */
+.slide.regular-slide .background {
+  background-image: url('https://img.freepik.com/premium-photo/abstract-blurred-sky-colorful_40299-22.jpg');
+  filter: blur(8px);
+}
+
+/* Layout: Navigation Panel (links) & Info Panel (rechts) */
+
+/* Main Menu Slide Adjustments */
+.slide.main-menu .nav-panel {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  width: 20%;
+  height: auto;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.slide.main-menu .info-panel {
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  width: 75%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  padding: 30px;
+  box-sizing: border-box;
+  transition: all 0.8s ease;
+}
+
+/* Regular Slides Adjustments */
+.slide.regular-slide .nav-panel {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 25%;
+  height: auto;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  transition: opacity 0.8s ease, filter 0.8s ease;
+}
+.slide.regular-slide .info-panel {
+  position: absolute;
+  top: 10%;
+  right: 2%;
+  width: 72%;
+  height: 80%;
+  z-index: 2;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  padding: 30px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transition: all 0.8s ease;
+}
+
+/* Status Box */
+.status-box {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 5px;
+}
+.status-box h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+}
+
+/* Navigation Buttons Container */
+.nav-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+/* Buttons Common Styling */
+button.btn-back,
+button.btn-next,
+button.btn-restart,
+button.btn-main {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Main Menu Button with Color Changing Animation */
+button.btn-main {
+  animation: colorCycle 3s infinite;
+}
+@keyframes colorCycle {
+  0%   { background-color: #1abc9c; }
+  25%  { background-color: #3498db; }
+  50%  { background-color: #9b59b6; }
+  75%  { background-color: #e74c3c; }
+  100% { background-color: #1abc9c; }
+}
+
+/* Navigation Buttons (Zurück, Weiter) with White-to-Black Transparent Effect */
+button.btn-back,
+button.btn-next {
+  animation: navColorCycle 15s infinite;
+}
+@keyframes navColorCycle {
+  0% { background-color: rgba(255,255,255,0.2); }
+  50% { background-color: rgba(0,0,0,0.6); }
+  100% { background-color: rgba(255,255,255,0.2); }
+}
+
+/* Hover Effects for Buttons */
+button.btn-back:hover,
+button.btn-next:hover,
+button.btn-restart:hover,
+button.btn-main:hover {
+  transform: scale(1.05);
+}
+
+/* Info Panel Content Styling */
+.info-content {
+  text-align: left;
+}
+.info-content h1,
+.info-content h2 {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+.info-content p {
+  font-size: 2rem;
+  margin: 10px 0;
+}
+.info-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.5rem;
+}
+.info-content ul li {
+  background: rgba(0,0,0,0.5);
+  margin: 8px 0;
+  padding: 12px 20px;
+  border-radius: 4px;
+}
+
+/* Text Box for Slide 3 */
+.text-box {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* Die Linke Logo Styling - Enlarged to 1000px */
+.die-linke-logo {
+  display: block;
+  max-width: 1000px;
+  margin: 20px auto;
+  border: 2px solid #fff;
+  border-radius: 8px;
+}
+
+/* Kandidatenbilder */
+.candidate-image {
+  display: block;
+  max-width: 300px;
+  margin: 10px auto;
+  border: 2px solid #fff;
+  border-radius: 8px;
+}
+
+/* Container for KI images in a vertical stack */
+.ki-images {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* Make the top (KI Bild) a bit bigger */
+.ki-image {
+  width: 25%; /* adjust as needed */
+  height: auto;
+  object-fit: cover;
+}
+
+/* Make the diagram a bit smaller */
+.ki-chart {
+  width: 90%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Full-Screen Expansion Styles for Slide 8 */
+.slide.slide-8.expanded .info-panel {
+  top: 2.5%;
+  right: 2.5%;
+  width: 95%;
+  height: 95%;
+}
+.slide.slide-8.expanded .nav-panel {
+  opacity: 0;
+  filter: blur(5px);
+  pointer-events: none;
+}
+.slide.slide-8.expanded .info-content {
+  transform: scale(1.05);
+}
+.slide.slide-8 .info-panel,
+.slide.slide-8 .nav-panel,
+.slide.slide-8 .info-content {
+  transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Full-Screen Toggle Button (Vollbild) - Positioned outside the info-panel */
+#toggle-fullscreen {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  padding: 10px 15px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+#toggle-fullscreen:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Style for the Wahlwerbespot Button with transparent, blurry background */
+button.btn-video {
+  padding: 12px 25px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+button.btn-video:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.05);
+}
+
+/* Smoother Morph Transition Animation for Slides */
+@keyframes morphTransition {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Video Modal Styling */
+.video-modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.8);
+}
+.video-content {
+  position: relative;
+  margin: 5% auto;
+  width: 80%;
+  max-width: 800px;
+}
+.video-content iframe {
+  width: 100%;
+  height: 450px;
+}
+.close-button {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* Final Slide: "Neu starten" Button with Distinct RGB Coloring */
+button.final-btn {
+  background-color: #ff6347; /* Tomato */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+button.final-btn:hover {
+  background-color: #ff4500; /* Orange Red */
+  transform: scale(1.05);
+}
+    /* === END OF YOUR CSS === */
+  </style>
+</head>
+<body>
+
+  <!-- Paste your entire HTML content here (the <div class="presentation"> ... </div> part) -->
+  
+  
+  <!-- START OF YOUR HTML -->
+  
+  <!-- Your HTML slides go here -->
+  <!-- HTML (do not include <body> tags as CodePen handles that automatically) -->
+<div class="presentation">
+  <!-- Slide 0: Main Menu / Intro -->
+  <div class="slide slide-0 main-menu">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Willkommen</h3>
+      </div>
+      <div class="nav-buttons">
+        <!-- Main menu button with animated color changing -->
+        <button class="btn-main btn-next">Präsentation Starten</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h1>Die Linke Präsentation</h1>
+        <!-- Die Linke logo from provided link -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Logo_Die_Linke_%282023%29.svg" alt="Die Linke Logo" class="die-linke-logo">
+        <p>Tauche ein in die Reise.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 1: Übersicht (Inhaltsverzeichnis) -->
+  <div class="slide slide-1 regular-slide">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Folie 1: Übersicht</h3>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back">Zurück</button>
+        <button class="btn-next">Weiter</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>Inhaltsverzeichnis</h2>
+        <ul>
+          <li>Entstehung der Linken</li>
+          <li>Wahlprogramm</li>
+          <li>Kandidaten</li>
+          <li>Wahlwerbespot</li>
+          <li>Quellen</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: Zusammensetzung der Linken -->
+  <div class="slide slide-2 regular-slide">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Folie 2: Zusammensetzung der Linken</h3>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back">Zurück</button>
+        <button class="btn-next">Weiter</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>Zusammensetzung der Linken</h2>
+        <ul>
+          <li>SPD</li>
+          <li>WASG (Wahlalternative Arbeit & soziale Gerechtigkeit)</li>
+          <li>PDS (Partei des Demokratischen Sozialismus)</li>
+          <li>Sozialistische Einheitspartei Deutschlands (SED)</li>
+          <li>Die Linke</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Entstehung der Linken -->
+  <div class="slide slide-3 regular-slide">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Folie 3: Entstehung der Linken</h3>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back">Zurück</button>
+        <button class="btn-next">Weiter</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>Entstehung der Linken</h2>
+        <!-- Text in einer eigenen Box zur besseren Lesbarkeit -->
+        <div class="text-box">
+          <p>Die Linke ist eine linke, demokratisch-sozialistische Partei in Deutschland. Die Partei entstand im Juni 2007 durch die Verschmelzung der SPD-Abspaltung WASG und der Linkspartei PDS.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Wahlprogramm (Teil 1) -->
+  <div class="slide slide-4 regular-slide">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Folie 4: Wahlprogramm (Teil 1)</h3>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back">Zurück</button>
+        <button class="btn-next">Weiter</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>Wahlprogramm (Teil 1)</h2>
+        <ul>
+          <li>Streichung der Mehrwertsteuer auf Grundnahrungsmittel, Hygieneartikel und Bus/Bahn</li>
+          <li>Einführung eines bundesweiten Mietendeckels</li>
+          <li>Vermögenssteuer</li>
+          <li>Geringere Einkommenssteuer</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Wahlprogramm (Teil 2) -->
+  <div class="slide slide-5 regular-slide">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Folie 5: Wahlprogramm (Teil 2)</h3>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back">Zurück</button>
+        <button class="btn-next">Weiter</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>Wahlprogramm (Teil 2)</h2>
+        <ul>
+          <li>Erhöhung des Mindestlohns auf 15 Euro</li>
+          <li>Solidarische Mindestrente von 1400 Euro monatlich</li>
+          <li>Für Frieden in der Welt, Diplomatie und Abrüstung</li>
+          <li>Kostenloses Mittagessen in Kitas und Schulen</li>
+          <li>Klimaschutz: Die größten Klimasünder (Reiche und Konzerne) sollen zahlen</li>
+          <li>Arbeitserlaubnis für Geflüchtete ab dem ersten Tag und Recht auf Asyl</li>
+          <li>Rechtsanspruch auf Unterbringung in Frauenhäusern für Frauen in Not</li>
+          <li>Gleicher Lohn für gleichwertige Arbeit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Kandidaten bei der Bundestagswahl 2025 -->
+  <div class="slide slide-6 regular-slide">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Folie 6: Kandidaten</h3>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back">Zurück</button>
+        <button class="btn-next">Weiter</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>Kandidaten bei der Bundestagswahl 2025</h2>
+        <div class="candidate">
+          <h3>Heidi Reichinnek</h3>
+          <ul>
+            <li>Seit 2021 Mitglied des Deutschen Bundestags</li>
+            <li>Seit Februar 2024 Vorsitzende der Gruppe Die Linke</li>
+          </ul>
+          <img src="https://www.bundestag.de/resource/image/862340/3x4/864/1152/b785a350d7eac9265ec58025f535f7f2/89F85498568FAE112833B62C3348F9A9/reichinnek_heidi.jpg" alt="Heidi Reichinnek" class="candidate-image">
+        </div>
+        <div class="candidate">
+          <h3>Jan van Aken</h3>
+          <ul>
+            <li>Seit Oktober 2024 gemeinsam mit Ines Schwerdtner Bundesvorsitzender der Linkspartei</li>
+          </ul>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/2025-01-18_Au%C3%9Ferordentlicher_Bundesparteitag_Die_Linke_2025_in_Berlin_by_Sandro_Halank%E2%80%93195.jpg/800px-2025-01-18_Au%C3%9Ferordentlicher_Bundesparteitag_Die_Linke_2025_in_Berlin_by_Sandro_Halank%E2%80%93195.jpg" alt="Jan van Aken" class="candidate-image">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Wahlwerbespot -->
+<div class="slide slide-7 regular-slide">
+  <div class="background"></div>
+  <div class="nav-panel">
+    <div class="status-box">
+      <h3>Folie 7: Wahlwerbespot</h3>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn-back">Zurück</button>
+      <button class="btn-next">Weiter</button>
+    </div>
+  </div>
+  <div class="info-panel">
+    <div class="info-content">
+      <h2>Wahlwerbespot</h2>
+      <p>Klicke auf den Button, um den Wahlwerbespot anzusehen.</p>
+      <button id="open-video" class="btn-video">Wahlwerbespot ansehen</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Slide 8: KI-Wahlpräferenz with Full-Screen Toggle Button -->
+  <div class="slide slide-8 regular-slide">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Folie 8: KI-Wahlpräferenz</h3>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back">Zurück</button>
+        <button class="btn-next">Weiter</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>KI-Wahlpräferenz</h2>
+        <ul>
+          <li>Die Linke: 86,8 %</li>
+          <li>Bündnis 90/Die Grünen: 80,3 % – 85,5 %</li>
+          <li>SPD: 75,0 % – 80,3 %</li>
+          <li>FDP: 36,8 % – 42,1 %</li>
+          <li>CDU/CSU: 25,0 % – 32,9 %</li>
+          <li>AfD: 14,5 % – 17,1 %</li>
+        </ul>
+        <!-- Vertical container: first the KI Bild, then the diagram -->
+        <div class="ki-images">
+          <img src="https://pbs.twimg.com/media/GnAXC8zXcAA8EDh?format=jpg&name=large" alt="KI Bild" class="ki-image">
+          <img src="https://pbs.twimg.com/media/GnAWu9QXcAA_7nA?format=jpg&name=4096x4096" alt="Diagramm KI-Wahlergebnisse" class="ki-chart">
+        </div>
+      </div>
+    </div>
+    <!-- Full-Screen Toggle Button placed outside the info-panel -->
+    <button id="toggle-fullscreen" class="btn-resize">Vollbild</button>
+  </div>
+
+  <!-- Slide 9: Quellen -->
+  <div class="slide slide-9 regular-slide">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Folie 9: Quellen</h3>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back">Zurück</button>
+        <button class="btn-next">Weiter</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>Quellen</h2>
+        <ul>
+          <li>Wikipedia</li>
+          <li>Die Linke</li>
+          <li>YouTube</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: Danke für ihre Aufmerksamkeit -->
+  <div class="slide slide-10 regular-slide">
+    <div class="background"></div>
+    <div class="nav-panel">
+      <div class="status-box">
+        <h3>Folie 10: Danke für ihre Aufmerksamkeit</h3>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back">Zurück</button>
+        <button class="btn-restart final-btn">Neu starten</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>Danke für ihre Aufmerksamkeit!</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Video Modal for YouTube -->
+<div id="video-modal" class="video-modal">
+  <div class="video-content">
+    <span class="close-button">&times;</span>
+    <iframe id="youtube-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+  <!-- END OF YOUR HTML -->
+
+  <!-- Paste your JS inside this <script> tag -->
+  <script>
+    // === START OF YOUR JS ===
+
+    // Paste entire JavaScript here
+    // JavaScript for Slide Navigation and Interaction
+document.addEventListener("DOMContentLoaded", function () {
+  const slides = document.querySelectorAll(".slide");
+  let currentSlide = 0;
+
+  // Function to show the current slide
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.style.display = i === index ? "block" : "none";
+      if (i === index) slide.classList.add("active");
+      else slide.classList.remove("active");
+    });
+  }
+
+  // Initial display
+  showSlide(currentSlide);
+
+  // Next Button functionality
+  document.querySelectorAll(".btn-next").forEach((button) => {
+    button.addEventListener("click", function () {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        showSlide(currentSlide);
+      }
+    });
+  });
+
+  // Back Button functionality
+  document.querySelectorAll(".btn-back").forEach((button) => {
+    button.addEventListener("click", function () {
+      if (currentSlide > 0) {
+        currentSlide--;
+        showSlide(currentSlide);
+      }
+    });
+  });
+
+  // Restart Button functionality (for final slide)
+  document.querySelectorAll(".btn-restart").forEach((button) => {
+    button.addEventListener("click", function () {
+      currentSlide = 0;
+      showSlide(currentSlide);
+    });
+  });
+
+  // Optional: Allow "Enter" key to start presentation from the Main Menu
+  document.addEventListener("keydown", function (e) {
+    if (currentSlide === 0 && e.key === "Enter") {
+      currentSlide++;
+      showSlide(currentSlide);
+    }
+  });
+
+  // Modal for YouTube Video
+  const videoModal = document.getElementById("video-modal");
+  const closeButton = document.querySelector(".close-button");
+  const videoButton = document.getElementById("open-video");
+
+  videoButton.addEventListener("click", function(){
+      // Set iframe src to embed URL with autoplay and show modal
+      document.getElementById("youtube-video").src = "https://www.youtube.com/embed/jaD4t-UN4E4?autoplay=1";
+      videoModal.style.display = "block";
+  });
+
+  closeButton.addEventListener("click", function(){
+      videoModal.style.display = "none";
+      document.getElementById("youtube-video").src = "";
+  });
+
+  window.addEventListener("click", function(event) {
+      if(event.target == videoModal){
+          videoModal.style.display = "none";
+          document.getElementById("youtube-video").src = "";
+      }
+  });
+
+  // Full-Screen Toggle Button for Slide 8
+  const toggleButton = document.getElementById("toggle-fullscreen");
+  if (toggleButton) {
+    toggleButton.addEventListener("click", function(){
+      const slide8 = document.querySelector(".slide.slide-8");
+      slide8.classList.toggle("expanded");
+      // Toggle button text accordingly
+      if(slide8.classList.contains("expanded")){
+          toggleButton.textContent = "Normal";
+      } else {
+          toggleButton.textContent = "Vollbild";
+      }
+    });
+  }
+});
+    // === END OF YOUR JS ===
+  </script>
+</body>
+</html>
